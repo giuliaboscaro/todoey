@@ -12,9 +12,14 @@ class ListViewController: UITableViewController {
 
     var itemArray = ["Take out the trash", "Cook", "Study Swift"]
     
+    let defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        if let items = defaults.array(forKey: "ToDoArray") as? [String] {
+            itemArray = items
+        }
     }
     
     //MARK - Tableview Datasource Methods
@@ -59,6 +64,7 @@ class ListViewController: UITableViewController {
             print("Works")
             if let newToDo = textField.text {
                 self.itemArray.append(newToDo)
+                self.defaults.set(self.itemArray, forKey: "ToDoArray")
                 self.tableView.reloadData()
             }
         }
