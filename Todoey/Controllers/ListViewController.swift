@@ -10,16 +10,13 @@ import UIKit
 
 class ListViewController: UITableViewController {
 
-    var itemArray = ["Take out the trash", "Cook", "Study Swift"]
-    
-    let defaults = UserDefaults.standard
+    var itemArray = [Item]()
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if let items = defaults.array(forKey: "ToDoArray") as? [String] {
-            itemArray = items
-        }
+        loadItems()
     }
     
     //MARK - Tableview Datasource Methods
@@ -27,7 +24,11 @@ class ListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath)
         
-        cell.textLabel?.text = itemArray[indexPath.row]
+        let item = itemArray[indexPath.row]
+        
+        cell.textLabel?.text = item.name
+        
+        cell.accessoryType = item.done ? .checkmark : .none
         
         return cell
         
@@ -41,13 +42,11 @@ class ListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .none
-        } else {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-        }
+        itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        saveItems()
         
         
     }
@@ -61,12 +60,17 @@ class ListViewController: UITableViewController {
         let alert = UIAlertController(title: "Add new Todo item", message: "", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "Add item", style: .default) { (action) in
-            print("Works")
-            if let newToDo = textField.text {
-                self.itemArray.append(newToDo)
-                self.defaults.set(self.itemArray, forKey: "ToDoArray")
-                self.tableView.reloadData()
+            
+            let newItem = Item()
+            
+            if textField.text != nil {
+                newItem.name = textField.text!
+                self.itemArray.append(newItem)
+            } else {
+                alert.dismiss(animated: true, completion: nil)
             }
+            
+            self.saveItems()
         }
         
         alert.addTextField { (alertTextField) in
@@ -80,8 +84,32 @@ class ListViewController: UITableViewController {
         
     }
     
+    //MARK - Model Manipulation Methods
     
+    func saveItems() {
+        
+        let encoder = PropertyListEncoder()
+        
+        do {
+            let data = try encoder.encode(itemArray)
+            try data.write(to: dataFilePath!)
+        } catch {
+            print("Error encoding item array \(error)")
+        }
+        
+        tableView.reloadData()
+    }
     
+    func loadItems() {
+        if let data = try? Data(contentsOf: dataFilePath!) {
+            let decoder = PropertyListDecoder()
+            do {
+                itemArray = try decoder.decode([Item].self, from: data)
+            } catch {
+                print("Error decoding item array \(error)")
+            }
+        }
+    }
     
 }
 
