@@ -10,7 +10,7 @@ import UIKit
 
 class ListViewController: UITableViewController {
 
-    let itemArray = ["Take out the trash", "Cook", "Study Swift"]
+    var itemArray = ["Take out the trash", "Cook", "Study Swift"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +35,6 @@ class ListViewController: UITableViewController {
     // MARK - TableView Delegate Methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(itemArray[indexPath.row])
         
         if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
             tableView.cellForRow(at: indexPath)?.accessoryType = .none
@@ -47,6 +46,36 @@ class ListViewController: UITableViewController {
         
         
     }
+    
+    // MARK - Add new items functionality
+    
+    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        
+        var textField = UITextField()
+        
+        let alert = UIAlertController(title: "Add new Todo item", message: "", preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: "Add item", style: .default) { (action) in
+            print("Works")
+            if let newToDo = textField.text {
+                self.itemArray.append(newToDo)
+                self.tableView.reloadData()
+            }
+        }
+        
+        alert.addTextField { (alertTextField) in
+            alertTextField.placeholder = "That thing you need to do"
+            textField = alertTextField
+        }
+        
+        alert.addAction(action)
+        
+        present(alert, animated: true, completion: nil)
+        
+    }
+    
+    
+    
     
 }
 
