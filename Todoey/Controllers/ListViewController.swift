@@ -12,6 +12,13 @@ import CoreData
 class ListViewController: UITableViewController{
 
     var itemArray = [Item]()
+    
+    var selectedCategory: Category? {
+        didSet {
+            loadItems()
+        }
+    }
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     @IBOutlet weak var searchBar: UISearchBar!
@@ -23,8 +30,6 @@ class ListViewController: UITableViewController{
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
         searchBar.delegate = self
-        
-        loadItems()
     }
     
     //MARK - Tableview Datasource Methods
@@ -72,8 +77,9 @@ class ListViewController: UITableViewController{
             let newItem = Item(context: self.context)
             newItem.done = false
             
-            if textField.text != nil {
-                newItem.name = textField.text!
+            if let itemName = textField.text {
+                newItem.name = itemName
+                newItem.parentCategory = self.selectedCategory
                 self.itemArray.append(newItem)
             } else {
                 alert.dismiss(animated: true, completion: nil)
@@ -106,7 +112,16 @@ class ListViewController: UITableViewController{
         tableView.reloadData()
     }
     
-    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest() ) {
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(),for predicate: NSPredicate? = nil ) {
+        
+        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", (selectedCategory?.name)!)
+        
+        if let additionalPredicate = predicate {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
+        } else {
+            request.predicate = categoryPredicate
+        }
+        
         do {
             itemArray = try context.fetch(request)
         } catch {
@@ -125,11 +140,11 @@ extension ListViewController: UISearchBarDelegate {
         
         let request: NSFetchRequest<Item> = Item.fetchRequest()
         
-        request.predicate = NSPredicate(format: "name CONTAINS[cd] %@", searchBar.text!)
+        let predicate = NSPredicate(format: "name CONTAINS[cd] %@", searchBar.text!)
         
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         
-        loadItems(with: request)
+        loadItems(with: request, for: predicate)
         
         if searchBar.text?.count == 0 {
             loadItems()

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5816398D21EA88F000F9B918 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5816398C21EA88F000F9B918 /* CategoryViewController.swift */; };
 		584440A021DAC06D000613A0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5844409F21DAC06D000613A0 /* AppDelegate.swift */; };
 		584440A221DAC06D000613A0 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584440A121DAC06D000613A0 /* ListViewController.swift */; };
 		584440A521DAC06D000613A0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 584440A321DAC06D000613A0 /* Main.storyboard */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5816398C21EA88F000F9B918 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		5844409C21DAC06D000613A0 /* Todoey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todoey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5844409F21DAC06D000613A0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		584440A121DAC06D000613A0 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
@@ -58,8 +60,8 @@
 			children = (
 				5877CF2421E27F9B00D800E3 /* Model */,
 				5844409F21DAC06D000613A0 /* AppDelegate.swift */,
-				5877CF2721E2803A00D800E3 /* Controllers */,
 				5877CF2821E2804600D800E3 /* Views */,
+				5877CF2721E2803A00D800E3 /* Controllers */,
 				5877CF2921E2806E00D800E3 /* Supporting Files */,
 				584440AB21DAC070000613A0 /* Info.plist */,
 			);
@@ -77,6 +79,7 @@
 		5877CF2721E2803A00D800E3 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				5816398C21EA88F000F9B918 /* CategoryViewController.swift */,
 				584440A121DAC06D000613A0 /* ListViewController.swift */,
 			);
 			path = Controllers;
@@ -170,6 +173,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5816398D21EA88F000F9B918 /* CategoryViewController.swift in Sources */,
 				584440A221DAC06D000613A0 /* ListViewController.swift in Sources */,
 				5877CF4D21E56D3900D800E3 /* DataModel.xcdatamodeld in Sources */,
 				584440A021DAC06D000613A0 /* AppDelegate.swift in Sources */,
