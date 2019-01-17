@@ -72,6 +72,8 @@ class ListViewController: SwipeTableViewController{
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         if let item = toDoItems?[indexPath.row] {
+            cell.selectionStyle = .none
+            
             cell.textLabel?.text = item.name
             
             let categoryBackground = UIColor(hexString: selectedCategory!.backgroundColor)
@@ -81,6 +83,7 @@ class ListViewController: SwipeTableViewController{
             if let color = categoryBackground?.darken(byPercentage: percentage ) {
                 cell.backgroundColor = color
                 cell.textLabel?.textColor = ContrastColorOf(color, returnFlat: true)
+                cell.tintColor = ContrastColorOf(color, returnFlat: true)
             }
             
             
@@ -124,7 +127,7 @@ class ListViewController: SwipeTableViewController{
         
         var textField = UITextField()
         
-        let alert = UIAlertController(title: "Add new Todo item", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add new item", message: "", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "Add item", style: .default) { (action) in
     
